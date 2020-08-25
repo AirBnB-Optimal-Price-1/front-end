@@ -161,7 +161,7 @@ const EditHome = () => {
           <Button
             style={{ width: "20%", marginLeft: "45%", marginBottom: "15px" }}
           >
-            Edit Home
+            Update
           </Button>
         </Card>
       </form>
