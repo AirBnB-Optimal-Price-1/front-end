@@ -1,31 +1,14 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { axiosWithAuth as axios } from "../utils/axiosWithAuth";
+import React, { useEffect, useState, useContext } from "react";
 import { Card, Button } from "reactstrap";
 import { PropertyContext } from "../ContextApi/propertiesContext";
-const HostHome = () => {
+import { useParams, useHistory } from "react-router-dom";
+import { axiosWithAuth as axios } from "../utils/axiosWithAuth";
+const EditHome = () => {
+  const [editHome, setEditHome] = useState([]);
   const [properties, setProperties] = useContext(PropertyContext);
-  const { id } = useParams();
   const { push } = useHistory();
-  const [host, setHost] = useState({
-    bedrooms: 0,
-    bathrooms: 0,
-    beds: 0,
-    bed_type: "",
-    security_deposit: 0,
-    cleaning_fee: 0,
-    minimum_nights: 0,
-    room_type: "",
-    neighbourhood_group_cleansed: "",
-    amenities: "null",
-  });
-
-  const handleChange = (e) => {
-    setHost({
-      ...host,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const { id } = useParams();
+  const [userId, setUserId] = useState("");
   const {
     neighbourhood_group_cleansed,
     bedrooms,
@@ -34,23 +17,47 @@ const HostHome = () => {
     cleaning_fee,
     room_type,
     minimum_nights,
-  } = host;
+  } = editHome;
+
+  useEffect(() => {
+    axios()
+      .get(`/api/property/${id}`)
+      .then((resp) => {
+        console.log(resp, "response");
+        setEditHome(resp.data);
+        setUserId(resp.data.user_id);
+      })
+      .catch((err) => console.log(err));
+  }, [id]);
+
+  const handleChange = (e) => {
+    setEditHome({
+      ...editHome,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios()
-      .post(`/api/users/${id}/property`, host)
+      .put(`/api/property/${id}`, editHome)
       .then((resp) => {
-        setProperties([...properties, resp.data]);
-        // console.log(resp);
+        console.log(resp);
+        axios()
+          .get(`/api/users/${userId}/property`)
+          .then((resp) => {
+            setProperties(resp.data);
+            console.log(resp, "response");
+          })
+          .catch((err) => console.log(err));
+        console.log(userId);
       })
       .catch((err) => console.log(err));
-
-    push(`/userprofile/${id}`);
+    push(`/userProfile/${userId}`);
   };
 
   const BackButton = () => {
-    push(`/userProfile/${id}`);
+    push(`/userProfile/${userId}`);
   };
 
   return (
@@ -154,7 +161,7 @@ const HostHome = () => {
           <Button
             style={{ width: "20%", marginLeft: "45%", marginBottom: "15px" }}
           >
-            Add Home
+            Edit Home
           </Button>
         </Card>
       </form>
@@ -163,4 +170,4 @@ const HostHome = () => {
   );
 };
 
-export default HostHome;
+export default EditHome;
