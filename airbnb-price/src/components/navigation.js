@@ -23,6 +23,7 @@ const Navigation = () => {
   const token = window.localStorage.getItem("token");
   const signOut = () => {
     window.localStorage.removeItem("token");
+    window.localStorage.removeItem("user");
     push("/login");
   };
   const userProfile = () => {
@@ -48,9 +49,9 @@ const Navigation = () => {
         {token ? (
           <div className="dropButtonDiv">
             <div className="hideThisDiv">
-              <Link>
+              <Button>
                 <NavbarText className="logButton">Log In</NavbarText>
-              </Link>
+              </Button>
             </div>
             <ButtonDropdown
               isOpen={button}
@@ -75,7 +76,7 @@ const Navigation = () => {
           </div>
         )}
       </Navbar>
-      <div class="navBorder"></div>
+      <div className="navBorder"></div>
     </>
   );
 };

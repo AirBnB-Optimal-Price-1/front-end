@@ -8,7 +8,7 @@ import {
   Input,
   Button,
 } from "reactstrap";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { axiosWithAuth as axios } from "../utils/axiosWithAuth";
 import "../styling/login.css";
 const Login = () => {
@@ -17,7 +17,7 @@ const Login = () => {
     username: "",
     password: "",
   });
-
+  const { id } = useParams();
   const { username, password } = login;
 
   const handleChange = (e) => {
@@ -35,9 +35,9 @@ const Login = () => {
         console.log(res);
         window.localStorage.setItem("token", res.data.token);
         window.localStorage.setItem("user", res.data.user_id);
-
-        // added by zack, let me know if this is alright
         history.push(`/userprofile/${res.data.user_id}`);
+        window.location.reload(true);
+        // added by zack, let me know if this is alright
       })
       .catch((err) => console.log(err));
   };
