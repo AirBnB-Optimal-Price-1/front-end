@@ -16,7 +16,6 @@ export const ListingsProvider = (props) => {
       .catch((err) => console.log(err));
   }, []);
 
-
   return (
     <ListingsContext.Provider value={{ listings, setListings }}>
       {props.children}

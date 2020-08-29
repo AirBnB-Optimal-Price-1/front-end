@@ -33,10 +33,11 @@
   margin: auto;
   text-decoration: none;
 }
-.logButton:hover,
+
+/* .logButton:hover,
 .navText:hover {
   color: lightcoral;
-}
+} */
 .startButton.btn {
   color: black;
   background-color: white;
